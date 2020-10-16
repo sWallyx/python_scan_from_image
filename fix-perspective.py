@@ -1,9 +1,11 @@
 # import the necessary packages
-from skimage.filters import threshold_local
 import numpy as np
 import argparse
 import cv2
-import imutils
+from imutils import (
+    resize,
+    grab_contours,
+)
 from imutils.perspective import four_point_transform
 from PIL import Image
 
@@ -19,7 +21,7 @@ if args:
     image = cv2.imread('images/' + args["image"])
     ratio = image.shape[0] / 500.0
     orig = image.copy()
-    image = imutils.resize(image, height = 500)
+    image = resize(image, height = 500)
 
     # convert the image to grayscale, blur it, and find edges in the image
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -29,7 +31,7 @@ if args:
     # find the contours in the edged image, keeping only the
     # largest ones, and initialize the screen contour
     cnts = cv2.findContours(edged.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-    cnts = imutils.grab_contours(cnts)
+    cnts = grab_contours(cnts)
     cnts = sorted(cnts, key = cv2.contourArea, reverse = True)[:5]
     # loop over the contours
     for c in cnts:
