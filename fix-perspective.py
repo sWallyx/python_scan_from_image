@@ -46,4 +46,5 @@ if args:
     warped = four_point_transform(orig, screenCnt.reshape(4, 2) * ratio)
 
     # Save the image in the fixed directory
-    Image.fromarray(np.uint8(warped)).save("fixed/" + args["image"])
+    cv2.imwrite("fixed/" + args["image"], warped)
+
