@@ -1,27 +1,24 @@
 # import the necessary packages
-import numpy as np
 import argparse
+
 import cv2
-from imutils import (
-    resize,
-    grab_contours,
-)
+import numpy as np
+from imutils import grab_contours, resize
 from imutils.perspective import four_point_transform
 from PIL import Image
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--image", required = True,
-	help = "Path to the image to be scanned")
+ap.add_argument("-i", "--image", required=True, help="Path to the image to be scanned")
 args = vars(ap.parse_args())
 
 if args:
     # load the image and compute the ratio of the old height
     # to the new height, clone it, and resize it
-    image = cv2.imread('images/' + args["image"])
+    image = cv2.imread("images/" + args["image"])
     ratio = image.shape[0] / 500.0
     orig = image.copy()
-    image = resize(image, height = 500)
+    image = resize(image, height=500)
 
     # convert the image to grayscale, blur it, and find edges in the image
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -32,7 +29,7 @@ if args:
     # largest ones, and initialize the screen contour
     cnts = cv2.findContours(edged.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
     cnts = grab_contours(cnts)
-    cnts = sorted(cnts, key = cv2.contourArea, reverse = True)[:5]
+    cnts = sorted(cnts, key=cv2.contourArea, reverse=True)[:5]
     # loop over the contours
     for c in cnts:
         # approximate the contour
@@ -49,5 +46,4 @@ if args:
     warped = four_point_transform(orig, screenCnt.reshape(4, 2) * ratio)
 
     # Save the image in the fixed directory
-    Image.fromarray(np.uint8(warped)).save('fixed/' + args["image"])
-
+    Image.fromarray(np.uint8(warped)).save("fixed/" + args["image"])
