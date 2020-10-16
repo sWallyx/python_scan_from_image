@@ -1,0 +1,7 @@
+#  Gitignore file for this repository
+
+# MacOs Binary file
+.DS_Store
+
+# Python stuff
+__pycache__
